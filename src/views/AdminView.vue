@@ -2,6 +2,6 @@
 
 <template>
   <main>
-    <h1>HOME</h1>
+    <h1>ADMIN</h1>
   </main>
 </template>
