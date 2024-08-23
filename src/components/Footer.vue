@@ -33,10 +33,14 @@
     </div>
 
     <!-- Copyright -->
-    <div class="text-center text-white p-3" style="background-color: #404040">
+    <div
+      class="text-center p-3"
+      style="background-color: #404040"
+      id="divfooter"
+    >
       © 2024 Copyright:
       <a
-        class="text-white"
+        class="linkProyecto"
         href="https://github.com/FactoriaF5-FactZoopia/Sonar-Events-FrontEnd.git"
         target="_blank"
         >SonarEvents</a
@@ -46,6 +50,9 @@
   </footer>
 </template>
 <style scoped>
+footer {
+  box-shadow: 0 0 15px#d43089;
+}
 button {
   width: 70px;
   height: 70px;
@@ -93,5 +100,13 @@ button {
 #btnfb {
   transition: transform 2s;
   transform-style: preserve-3d;
+}
+#divfooter {
+  color: white;
+  box-shadow: 0 0 15px#d43089;
+}
+.linkProyecto {
+  font-size: 18px;
+  color: #d43089;
 }
 </style>
