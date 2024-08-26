@@ -28,25 +28,23 @@ const toggleMenu = () => {
             } md:flex px-4 mx-auto font-semibold font-heading space-x-10`"
           >
             <RouterLink to="/">
-              <li>
-                <a class="hover:text-gray-200" href="#" id="idHome">Home</a>
-              </li>
+              <li></li>
             </RouterLink>
             <RouterLink to="/eventos">
-              <li>
-                <a class="hover:text-gray-200" href="#" id="idEventos"
-                  >Eventos</a
-                >
-              </li>
+              <li></li>
             </RouterLink>
           </ul>
 
           <div class="hidden xl:flex items-center space-x-5 items-center">
             <a class="flex items-center hover:text-gray-200" href="#">
               <a class="hover:text-gray-200 font-semibold" id="logout" href="#"
-                >Log out</a
+                >Admin</a
               >
-              <img id="imgLogout" src="../assets/img/salir.png" alt="" />
+              <img
+                id="imgLogout"
+                src="../assets/img/usuariologueado.png"
+                alt=""
+              />
             </a>
           </div>
         </div>
@@ -107,7 +105,7 @@ const toggleMenu = () => {
 }
 
 #imgLogout {
-  width: 40px;
+  width: 50px;
 }
 #logout {
   margin-right: 20px;

@@ -51,7 +51,7 @@
 </template>
 <style scoped>
 footer {
-  box-shadow: 0 0 15px#d43089;
+  box-shadow: 0 -10px 15px#d43089;
 }
 button {
   width: 70px;
@@ -98,7 +98,7 @@ button {
 #btnig,
 #btntw,
 #btnfb {
-  transition: transform 2s;
+  transition: transform 3s;
   transform-style: preserve-3d;
 }
 #divfooter {
