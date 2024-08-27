@@ -93,7 +93,7 @@
   }
   
   table th {
-    background-color: #f2f2f2;
+    background-color: #d43089;
   }
   
   table tbody tr:nth-child(odd) {
@@ -110,7 +110,7 @@
   
   button {
     padding: 10px 15px;
-    background-color: #ff728f;
+    background-color: #d43089;
     color: white;
     border: none;
     border-radius: 5px;
