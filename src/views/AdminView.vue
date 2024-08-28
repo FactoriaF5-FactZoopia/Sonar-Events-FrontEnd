@@ -1,7 +1,24 @@
-<script setup></script>
+<script>
+import Table from '../components/Table.vue';
+
+export default {
+  name: 'AdminView',
+  components: {
+    Table,
+  },
+};
+</script>
 
 <template>
-  <main>
-    <h1>ADMIN</h1>
-  </main>
+  <div>
+    <h1>Admin View</h1>
+
+    <Table />
+  </div>
 </template>
+
+<style scoped>
+main {
+  height: 800px;
+}
+</style>
