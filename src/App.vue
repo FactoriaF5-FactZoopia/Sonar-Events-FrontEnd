@@ -1,13 +1,15 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import Navbar from "./components/Navbar.vue";
-
+import NavbarSinLogin from "./components/NavbarSinLogin.vue"
 import Footer from "./components/Footer.vue";
+
 </script>
 
 <template>
   <header>
-    <Navbar></Navbar>
+    <!-- <Navbar></Navbar> -->
+    <NavbarSinLogin></NavbarSinLogin>
+    logub
   </header>
 
   <RouterView />
