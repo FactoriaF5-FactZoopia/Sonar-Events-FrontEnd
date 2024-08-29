@@ -12,15 +12,14 @@ const router = createRouter({
     {
       path: "/eventos",
       name: "eventos",
-
       component: () => import("../views/EventosView.vue"),
     },
     {
       path: "/admin",
       name: "admin",
-
       component: () => import("../views/AdminView.vue"),
     },
+    
   ],
 });
 

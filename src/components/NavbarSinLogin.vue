@@ -1,12 +1,19 @@
 <script setup>
 import { ref } from "vue";
+import { usePopupStore } from '../stores/popup';
 
 const isMenuOpen = ref(false);
+const popupStore = usePopupStore();
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
 };
+
+const openLoginPopup = () => {
+  popupStore.openLogin();
+};
 </script>
+
 <template>
   <div class="flex flex-wrap h-screen" id="nav">
     <section class="relative mx-auto" id="mainnav">
@@ -36,19 +43,26 @@ const toggleMenu = () => {
           </ul>
 
           <div class="hidden xl:flex items-center space-x-5 items-center">
-            <a class="flex items-center hover:text-gray-200" href="#">
-              <a class="hover:text-gray-200 font-semibold" id="logout" href="#"
-                >Log in</a
+            <div class="flex items-center hover:text-gray-200">
+              <a 
+                class="hover:text-gray-200 font-semibold" 
+                id="logout" 
+                href="#"
+                @click.prevent="openLoginPopup"
               >
+                Log in
+              </a>
               <img
                 id="imgLogout"
                 src="../assets/img/usuariosonar2.png"
                 alt=""
+                @click="openLoginPopup"
+                class="cursor-pointer"
               />
-            </a>
+            </div>
           </div>
         </div>
-        <!-- Responsive navbar -->
+     
 
         <a
           class="navbar-burger self-center mr-12 xl:hidden"
