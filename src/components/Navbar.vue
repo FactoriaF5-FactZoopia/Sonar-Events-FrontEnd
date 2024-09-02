@@ -82,7 +82,7 @@ const toggleMenu = () => {
   height: auto;
 }
 #mainnav {
-  box-shadow: 0 17px 20px#d43089;
+  box-shadow: 0 15px 10px#d43089;
   height: 120px;
 }
 #logo {

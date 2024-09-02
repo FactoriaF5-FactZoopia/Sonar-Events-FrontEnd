@@ -1,7 +1,10 @@
 <script setup></script>
 
 <template>
-  <main>
-    <h1>EVENTOS</h1>
-  </main>
+  <main></main>
 </template>
+<style scoped>
+main {
+  height: auto;
+}
+</style>
