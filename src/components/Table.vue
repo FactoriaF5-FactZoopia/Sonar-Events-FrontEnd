@@ -1,74 +1,71 @@
 <template>
-    <div class="table-container">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Date</th>
-            <th scope="col">Available</th>
-            <th scope="col">Past Event</th>
-            <th scope="col">Max Participants</th>
-            <th scope="col">Description</th>
-            <th scope="col">Image</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Estopa</td>
-            <td>19 Oct 2024</td>
-            <td>Yes</td>
-            <td>No</td>
-            <td>7,500</td>
-            <td>Plaza de Toros El Bibio, Gijón</td>
-            <td></td>
-            <td><button><EditIcon /></button></td>
-            <td><button><TrashIcon /></button></td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>The Hardkiss</td>
-            <td>26 Oct 2024</td>
-            <td>Yes</td>
-            <td>No</td>
-            <td>1,100</td>
-            <td>Patioh de la Laboral, Gijón</td>
-            <td></td>
-            <td><button><EditIcon /></button></td>
-            <td><button><TrashIcon /></button></td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Nach</td>
-            <td>31 Oct 2024</td>
-            <td>Yes</td>
-            <td>No</td>
-            <td>500</td>
-            <td>Sir Lauren's, Oviedo</td>
-            <td></td>
-            <td><button><EditIcon /></button></td>
-            <td><button><TrashIcon /></button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </template>
-  
-  <script>
-  import EditIcon from '../assets/icons/EditIcon.vue';
-  import TrashIcon from '../assets/icons/TrashIcon.vue';
-  
-  export default {
-    name: 'TableComponent',
-    components: {
-      EditIcon,
-      TrashIcon
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Title</th>
+          <th scope="col">Date</th>
+          <th scope="col">Available</th>
+          <th scope="col">Past Event</th>
+          <th scope="col">Max Participants</th>
+          <th scope="col">Location</th>
+          <th scope="col">Description</th>
+          <th scope="col">Image</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="event in events" :key="event.id">
+          <th scope="row">{{ event.id }}</th>
+          <td>{{ event.title }}</td>
+          <td>{{ event.date }}</td>
+          <td>{{ event.available }}</td>
+          <td>{{ event.pastEvent }}</td>
+          <td>{{ event.maxParticipants }}</td>
+          <td>{{ event.location }}</td>
+          <td>{{ event.description }}</td>
+          <td>{{ event.image }}</td>
+          <td>
+            <button @click="editEvent(event.id)"><EditIcon /></button>
+          </td>
+          <td>
+            <button @click="deleteEvent(event.id)"><TrashIcon /></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+import EditIcon from '../assets/icons/EditIcon.vue';
+import TrashIcon from '../assets/icons/TrashIcon.vue';
+
+export default {
+  name: 'TableComponent',
+  props: {
+    events: {
+      type: Array,
+      required: true
+    }
+  },
+  components: {
+    EditIcon,
+    TrashIcon
+  },
+  methods: {
+    editEvent(id) {
+      this.$emit('edit-event', id);
+    },
+    deleteEvent(id) {
+      this.$emit('delete-event', id);
     }
   }
-  </script>
+}
+</script>
+
   
   <style scoped>
   .table-container {
