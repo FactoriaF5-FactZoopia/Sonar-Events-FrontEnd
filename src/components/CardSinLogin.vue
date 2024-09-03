@@ -58,7 +58,7 @@ const toggleBackgroundColorAndText = () => {
             </p>
           </div>
         </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
+      
       </div>
     </div>
 
@@ -106,7 +106,7 @@ const toggleBackgroundColorAndText = () => {
             </p>
           </div>
         </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
+      
       </div>
     </div>
 
@@ -153,7 +153,7 @@ const toggleBackgroundColorAndText = () => {
             </p>
           </div>
         </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
+      
       </div>
     </div>
 
@@ -200,9 +200,11 @@ const toggleBackgroundColorAndText = () => {
             </p>
           </div>
         </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
+      
       </div>
     </div>
+
+
    
  
 

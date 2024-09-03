@@ -27,7 +27,7 @@ const toggleMenu = () => {
               isMenuOpen ? 'block' : 'hidden'
             } md:flex px-4 mx-auto font-semibold font-heading space-x-10`"
           >
-            <RouterLink to="/">
+            <RouterLink to="/homewithlogin">
               <li>
                 <a class="hover:text-gray-200" href="#" id="idHome">Home</a>
               </li>
@@ -41,14 +41,19 @@ const toggleMenu = () => {
             </RouterLink>
           </ul>
 
-          <div class="hidden xl:flex items-center space-x-5 items-center">
-            <a class="flex items-center hover:text-gray-200" href="#">
-              <a class="hover:text-gray-200 font-semibold" id="logout" href="#"
-                >Log out</a
-              >
-              <img id="imgLogout" src="../assets/img/salir.png" alt="" />
-            </a>
-          </div>
+          <RouterLink to="/"
+            ><div class="hidden xl:flex items-center space-x-5 items-center">
+              <a class="flex items-center hover:text-gray-200" href="#">
+                <a
+                  class="hover:text-gray-200 font-semibold"
+                  id="logout"
+                  href="#"
+                  >Log out</a
+                >
+                <img id="imgLogout" src="../assets/img/salir.png" alt="" />
+              </a>
+            </div>
+          </RouterLink>
         </div>
         <!-- Responsive navbar -->
 
@@ -82,7 +87,7 @@ const toggleMenu = () => {
   height: auto;
 }
 #mainnav {
-  box-shadow: 0 17px 20px#d43089;
+  box-shadow: 0 15px 10px#d43089;
   height: 120px;
 }
 #logo {
