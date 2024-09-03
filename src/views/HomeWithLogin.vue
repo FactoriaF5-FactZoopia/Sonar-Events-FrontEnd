@@ -47,6 +47,7 @@ import Navbar from "@/components/Navbar.vue";
       <span style="--i: 28"></span>
     </div> -->
     <CardHome></CardHome>
+    <div id="space"></div>
   </main>
   <div id="blankspace"></div>
 </template>
@@ -114,6 +115,10 @@ span {
   width: 70%;
   height: 25px;
   color: #301f35;
+}
+
+#space {
+  height: 100px;
 }
 
 @keyframes animate {

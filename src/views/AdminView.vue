@@ -1,16 +1,25 @@
 <script setup>
 import NavbarAdmin from "@/components/NavbarAdmin.vue";
-import Table from "@/components/Table.vue";
+import Tables from "@/components/Tables.vue";
 </script>
 
 <template>
   <NavbarAdmin></NavbarAdmin>
   <main>
-    <Table></Table>
+    <div id="space"></div>
+    <div id="table">
+      <Tables></Tables>
+    </div>
+    <div id="space"></div>
   </main>
 </template>
 <style scoped>
 main {
   height: auto;
+  background-color: #cca9f6;
+}
+
+#space {
+  height: 100px;
 }
 </style>
