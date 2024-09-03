@@ -1,13 +1,12 @@
 <script setup>
 import Toggle from "@/components/Toggle.vue";
-import CardSinLogin from "@/components/CardSinLogin.vue";
+import CardHome from "@/components/CardHome.vue";
 import Login from "@/components/Login.vue";
-import NavbarSinLogin from "@/components/NavbarSinLogin.vue";
+import Navbar from "@/components/Navbar.vue";
 </script>
 
 <template>
-  <NavbarSinLogin></NavbarSinLogin>
-  <Login></Login>
+  <Navbar></Navbar>
   <div id="blankspace"></div>
   <main>
     <div id="containerslider">
@@ -47,7 +46,7 @@ import NavbarSinLogin from "@/components/NavbarSinLogin.vue";
       <span style="--i: 13"></span>
       <span style="--i: 28"></span>
     </div> -->
-    <CardSinLogin></CardSinLogin>
+    <CardHome></CardHome>
   </main>
   <div id="blankspace"></div>
 </template>

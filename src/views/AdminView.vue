@@ -1,24 +1,16 @@
-<script>
-import Table from '../components/Table.vue';
-
-export default {
-  name: 'AdminView',
-  components: {
-    Table,
-  },
-};
+<script setup>
+import NavbarAdmin from "@/components/NavbarAdmin.vue";
+import Table from "@/components/Table.vue";
 </script>
 
 <template>
-  <div>
-    <h1>Admin View</h1>
-
-    <Table />
-  </div>
+  <NavbarAdmin></NavbarAdmin>
+  <main>
+    <Table></Table>
+  </main>
 </template>
-
 <style scoped>
 main {
-  height: 800px;
+  height: auto;
 }
 </style>
