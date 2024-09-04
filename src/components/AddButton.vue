@@ -11,8 +11,11 @@
           <input type="text" id="title" />
 
           <label for="date">Date:</label>
-          <input type="date" id="date" />
+          <!-- <input type="date" id="date" /> -->
+          <input type="datetime-local" />
 
+          <label for="date">Place:</label>
+          <input type="text" id="place" />
           <label for="available">Available:</label>
           <select id="available">
             <option value="Yes">Yes</option>
@@ -25,14 +28,17 @@
             <option value="No">No</option>
           </select>
 
+          <label for="maxParticipants">Actual Participants:</label>
+          <input type="number" id="actualParticipants" />
+
           <label for="maxParticipants">Max Participants:</label>
           <input type="number" id="maxParticipants" />
 
-          <label for="description">Description:</label>
-          <textarea id="description"></textarea>
-
           <label for="image">Image:</label>
           <input type="file" id="image" />
+
+          <label for="description">Description:</label>
+          <textarea id="description"></textarea>
 
           <button type="button" @click="showModal = false">Submit</button>
         </form>
@@ -42,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const showModal = ref(false);
 </script>
@@ -113,7 +119,9 @@ label {
   margin-top: 10px;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
