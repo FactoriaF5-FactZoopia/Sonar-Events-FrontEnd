@@ -62,7 +62,7 @@ const showModal = ref(false);
 }
 
 button {
-  background-color: #d43089;
+  background-color: #301f35;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -73,10 +73,12 @@ button {
   box-sizing: border-box;
   font-size: 16px;
   transition: background-color 0.3s ease;
+  box-shadow: 0 5px 10px #d43089;
 }
 
 button:hover {
-  background-color: #a31c62;
+  background-color: #d43089;
+  box-shadow: 0 5px 10px #301f35;
 }
 
 @media (max-width: 768px) {
