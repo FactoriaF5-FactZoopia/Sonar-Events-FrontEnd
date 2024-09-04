@@ -5,11 +5,12 @@ const showModal = ref(false);
 
 const isBackgroundChanged = ref(false);
 
-const assistText = ref("Assist");
+const assistText = ref("Reserve a Place");
 
 const toggleBackgroundColorAndText = () => {
   isBackgroundChanged.value = !isBackgroundChanged.value;
-  assistText.value = isBackgroundChanged.value ? "Confirmed Attendance" : "Assist";
+  assistText.value = isBackgroundChanged.value ? "Confirmed Attendance" : "Reserve a Place";
+  
 };
 </script>
 
@@ -54,6 +55,7 @@ const toggleBackgroundColorAndText = () => {
             </p>
 
             <p class="info description" @click="showModal = true">
+              <i class="fas fa-info-circle"></i>
               <span>Description</span>
             </p>
           </div>
@@ -102,6 +104,7 @@ const toggleBackgroundColorAndText = () => {
             </p>
 
             <p class="info description" @click="showModal = true">
+              <i class="fas fa-info-circle"></i>
               <span>Description</span>
             </p>
           </div>
@@ -149,6 +152,7 @@ const toggleBackgroundColorAndText = () => {
             </p>
 
             <p class="info description" @click="showModal = true">
+              <i class="fas fa-info-circle"></i>
               <span>Description</span>
             </p>
           </div>
@@ -196,6 +200,7 @@ const toggleBackgroundColorAndText = () => {
             </p>
 
             <p class="info description" @click="showModal = true">
+              <i class="fas fa-info-circle"></i>
               <span>Description</span>
             </p>
           </div>
@@ -359,7 +364,7 @@ const toggleBackgroundColorAndText = () => {
 #link {
   font-weight: bold;
 }
-/* Modal styles */
+
 .modal {
   display: flex;
   justify-content: center;
@@ -405,5 +410,9 @@ const toggleBackgroundColorAndText = () => {
 .background-changed {
   background-color: #301f35; 
   color: white;
+  transition: transform 1.5s;
+  transform-style: preserve-3d;
+  transform: rotateX(360deg);
+  
 }
 </style>
