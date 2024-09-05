@@ -1,226 +1,112 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from 'vue';
 
+const events = ref([]);
 const showModal = ref(false);
-
+const selectedEvent = ref(null);
 const isBackgroundChanged = ref(false);
-
 const assistText = ref("Reserve a Place");
+
+
+const fetchEvents = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/v1/events/allevents');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log('Fetched events:', data);
+    events.value = data.map(event => ({
+      id: event.id,
+      title: event.title,
+      date: new Date(event.date).toLocaleString(), 
+      location: event.place,
+      currentAttendees: event.registeredParticipants,
+      totalAttendees: event.maxParticipants,
+      description: event.description,
+      imageUrl: event.image,
+      isAvailable: event.available,
+      isPast: event.past,
+    }));
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
+};
 
 const toggleBackgroundColorAndText = () => {
   isBackgroundChanged.value = !isBackgroundChanged.value;
   assistText.value = isBackgroundChanged.value ? "Confirmed Attendance" : "Reserve a Place";
 };
+
+
+const showEventDetails = (event) => {
+  selectedEvent.value = event;
+  console.log('Selected event:', event); // Depuración: Verifica el evento seleccionado
+  showModal.value = true;
+};
+
+onMounted(fetchEvents);
 </script>
 
 <template>
   <div class="container">
-    <div class="item-container">
+    <div v-for="event in events" :key="event.id" class="item-container">
       <div class="img-container">
-        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
+        <img id="img" :src="event.imageUrl" alt="Event image" />
       </div>
 
       <div class="body-container">
         <div class="overlay"></div>
 
         <div class="event-info">
-          <p class="title">Guns n' Roses</p>
+          <p class="title">{{ event.title }}</p>
           <div class="separator"></div>
           <p class="info">
             <i class="far fa-calendar-alt"></i>
-            Sat, Sep 19, 10:00 AM EDT
+            {{ event.date }}
           </p>
           <p class="price">
             <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>120</span>
+            <span>{{ event.currentAttendees }}</span>
             <span>/</span>
-            <span>500</span>
+            <span>{{ event.totalAttendees }}</span>
           </p>
 
           <div class="additional-info">
             <p class="info">
               <i class="fas fa-map-marker-alt"></i>
-              Madrid
+              {{ event.location }}
             </p>
 
             <p class="info">
               <div 
                 id="checked" 
                 :class="{ 'background-changed': isBackgroundChanged }" 
-               
               >
                 {{ assistText }}
               </div>
             </p>
 
-            <p class="info description" @click="showModal = true">
-                <i class="fas fa-info-circle"></i>
+            <p class="info description" @click="showEventDetails(event)">
+              <i class="fas fa-info-circle"></i>
               <span>Description</span>
             </p>
           </div>
         </div>
-      
+        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
       </div>
     </div>
-
-
-    <div class="item-container">
-      <div class="img-container">
-        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
-      </div>
-
-      <div class="body-container">
-        <div class="overlay"></div>
-
-        <div class="event-info">
-          <p class="title">Guns n' Roses</p>
-          <div class="separator"></div>
-          <p class="info">
-            <i class="far fa-calendar-alt"></i>
-            Sat, Sep 19, 10:00 AM EDT
-          </p>
-          <p class="price">
-            <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>120</span>
-            <span>/</span>
-            <span>500</span>
-          </p>
-
-          <div class="additional-info">
-            <p class="info">
-              <i class="fas fa-map-marker-alt"></i>
-              Madrid
-            </p>
-
-            <p class="info">
-              <div 
-                id="checked" 
-                :class="{ 'background-changed': isBackgroundChanged }" 
-               
-              >
-                {{ assistText }}
-              </div>
-            </p>
-
-            <p class="info description" @click="showModal = true">
-                <i class="fas fa-info-circle"></i>
-              <span>Description</span>
-            </p>
-          </div>
-        </div>
-      
-      </div>
-    </div>
-
-    <div class="item-container">
-      <div class="img-container">
-        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
-      </div>
-
-      <div class="body-container">
-        <div class="overlay"></div>
-
-        <div class="event-info">
-          <p class="title">Guns n' Roses</p>
-          <div class="separator"></div>
-          <p class="info">
-            <i class="far fa-calendar-alt"></i>
-            Sat, Sep 19, 10:00 AM EDT
-          </p>
-          <p class="price">
-            <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>120</span>
-            <span>/</span>
-            <span>500</span>
-          </p>
-
-          <div class="additional-info">
-            <p class="info">
-              <i class="fas fa-map-marker-alt"></i>
-              Madrid
-            </p>
-
-            <p class="info">
-              <div 
-                id="checked" 
-                :class="{ 'background-changed': isBackgroundChanged }" 
-               
-              >
-                {{ assistText }}
-              </div>
-            </p>
-
-            <p class="info description" @click="showModal = true">
-                <i class="fas fa-info-circle"></i>
-              <span>Description</span>
-            </p>
-          </div>
-        </div>
-      
-      </div>
-    </div>
-
-    <div class="item-container">
-      <div class="img-container">
-        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
-      </div>
-
-      <div class="body-container">
-        <div class="overlay"></div>
-
-        <div class="event-info">
-          <p class="title">Guns n' Roses</p>
-          <div class="separator"></div>
-          <p class="info">
-            <i class="far fa-calendar-alt"></i>
-            Sat, Sep 19, 10:00 AM EDT
-          </p>
-          <p class="price">
-            <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>120</span>
-            <span>/</span>
-            <span>500</span>
-          </p>
-
-          <div class="additional-info">
-            <p class="info">
-              <i class="fas fa-map-marker-alt"></i>
-              Madrid
-            </p>
-
-            <p class="info">
-              <div 
-                id="checked" 
-                :class="{ 'background-changed': isBackgroundChanged }" 
-               
-              >
-                {{ assistText }}
-              </div>
-            </p>
-
-            <p class="info description" @click="showModal = true">
-                <i class="fas fa-info-circle"></i>
-              <span>Description</span>
-            </p>
-          </div>
-        </div>
-      
-      </div>
-    </div>
-
-
-   
- 
 
     <!-- Modal -->
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="showModal = false">&times;</span>
-        <p>Descripción detallada del evento...</p>
+        <p>{{ selectedEvent?.description || 'No description available' }}</p>
       </div>
     </div>
   </div>
 </template>
+
 <style scoped>
 .container {
   width: 100%;

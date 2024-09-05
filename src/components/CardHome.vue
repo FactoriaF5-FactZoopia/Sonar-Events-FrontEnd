@@ -1,4 +1,99 @@
+
 <script setup>
+import { ref, onMounted } from 'vue';
+
+const events = ref([]);
+const showModal = ref(false);
+const isBackgroundChanged = ref(false);
+const assistText = ref("Reserve a Place");
+
+
+const fetchEvents = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/v1/events/allevents');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    events.value = data;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
+};
+
+
+const toggleBackgroundColorAndText = () => {
+  isBackgroundChanged.value = !isBackgroundChanged.value;
+  assistText.value = isBackgroundChanged.value ? "Confirmed Attendance" : "Reserve a Place";
+};
+
+
+onMounted(fetchEvents);
+</script>
+
+<template>
+  <div class="container">
+    <div v-for="event in events" :key="event.id" class="item-container">
+      <div class="img-container">
+        <img id="img" :src="event.imageUrl" alt="Event image" />
+      </div>
+
+      <div class="body-container">
+        <div class="overlay"></div>
+
+        <div class="event-info">
+          <p class="title">{{ event.title }}</p>
+          <div class="separator"></div>
+          <p class="info">
+            <i class="far fa-calendar-alt"></i>
+            {{ event.date }}
+          </p>
+          <p class="price">
+            <i id="iconUser" class="fa fa-user-circle"></i>
+            <span>{{ event.currentAttendees }}</span>
+            <span>/</span>
+            <span>{{ event.totalAttendees }}</span>
+          </p>
+
+          <div class="additional-info">
+            <p class="info">
+              <i class="fas fa-map-marker-alt"></i>
+              {{ event.location }}
+            </p>
+
+            <p class="info">
+              <div 
+                id="checked" 
+                :class="{ 'background-changed': isBackgroundChanged }" 
+              >
+                {{ assistText }}
+              </div>
+            </p>
+
+            <p class="info description" @click="showModal = true">
+              <i class="fas fa-info-circle"></i>
+              <span>Description</span>
+            </p>
+          </div>
+        </div>
+        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="showModal = false">&times;</span>
+        <p>Descripción detallada del evento...</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+
+<!-- <script setup>
 import { ref } from "vue";
 
 const showModal = ref(false);
@@ -208,18 +303,18 @@ const toggleBackgroundColorAndText = () => {
         <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
       </div>
     </div>
-   
+    -->
  
 
     <!-- Modal -->
-    <div v-if="showModal" class="modal">
+    <!-- <div v-if="showModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="showModal = false">&times;</span>
         <p>Descripción detallada del evento...</p>
       </div>
     </div>
   </div>
-</template>
+</template> --> 
 <style scoped>
 .container {
   width: 100%;
