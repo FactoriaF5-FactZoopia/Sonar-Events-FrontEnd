@@ -152,7 +152,7 @@ const toggleMenu = () => {
 }
 @media (max-width: 768px) {
   #titulo {
-    font-size: 10px;
+    font-size: 15px;
   }
 }
 </style>

@@ -109,4 +109,10 @@ button {
   font-size: 18px;
   color: #d43089;
 }
+@media (max-width: 600px) {
+  button {
+    width: 60px;
+    height: 60px;
+  }
+}
 </style>

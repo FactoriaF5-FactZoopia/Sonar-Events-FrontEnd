@@ -52,7 +52,7 @@ onMounted(fetchEvents);
   <div class="container">
     <div v-for="event in events" :key="event.id" class="item-container">
       <div class="img-container">
-        <img id="img" :src="event.imageUrl" alt="Event image" />
+        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
       </div>
 
       <div class="body-container">
@@ -93,7 +93,7 @@ onMounted(fetchEvents);
             </p>
           </div>
         </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
+      
       </div>
     </div>
 
@@ -298,4 +298,10 @@ onMounted(fetchEvents);
   background-color: #301f35; 
   color: white;
 }
+@media (max-width: 600px) {
+   .title{
+    font-size: 20px;
+   }
+  
+  }
 </style>

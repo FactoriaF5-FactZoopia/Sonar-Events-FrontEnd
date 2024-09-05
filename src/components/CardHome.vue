@@ -1,12 +1,9 @@
-
 <script setup>
 import { ref, onMounted } from 'vue';
 
 const events = ref([]);
 const showModal = ref(false);
-const isBackgroundChanged = ref(false);
-const assistText = ref("Reserve a Place");
-
+const selectedEvent = ref(null);
 
 const fetchEvents = async () => {
   try {
@@ -15,18 +12,36 @@ const fetchEvents = async () => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    events.value = data;
+    console.log('Fetched events:', data);
+    events.value = data.map(event => ({
+      id: event.id,
+      title: event.title,
+      date: new Date(event.date).toLocaleString(), 
+      location: event.place,
+      currentAttendees: event.registeredParticipants,
+      totalAttendees: event.maxParticipants,
+      description: event.description,
+      imageUrl: event.image,
+      isAvailable: event.available,
+      isPast: event.past,
+      isBackgroundChanged: false, // Estado para cada evento
+      assistText: "Reserve a Place" // Texto inicial para cada evento
+    }));
   } catch (error) {
     console.error('Error fetching events:', error);
   }
 };
 
-
-const toggleBackgroundColorAndText = () => {
-  isBackgroundChanged.value = !isBackgroundChanged.value;
-  assistText.value = isBackgroundChanged.value ? "Confirmed Attendance" : "Reserve a Place";
+const toggleBackgroundColorAndText = (event) => {
+  event.isBackgroundChanged = !event.isBackgroundChanged;
+  event.assistText = event.isBackgroundChanged ? "Confirmed Attendance" : "Reserve a Place";
 };
 
+const showEventDetails = (event) => {
+  selectedEvent.value = event;
+  console.log('Selected event:', event); // Depuración: Verifica el evento seleccionado
+  showModal.value = true;
+};
 
 onMounted(fetchEvents);
 </script>
@@ -35,7 +50,7 @@ onMounted(fetchEvents);
   <div class="container">
     <div v-for="event in events" :key="event.id" class="item-container">
       <div class="img-container">
-        <img id="img" :src="event.imageUrl" alt="Event image" />
+        <img id="img" src="../assets/img/aerosmith.jpg" alt="Event image" />
       </div>
 
       <div class="body-container">
@@ -64,19 +79,19 @@ onMounted(fetchEvents);
             <p class="info">
               <div 
                 id="checked" 
-                :class="{ 'background-changed': isBackgroundChanged }" 
+                :class="{ 'background-changed': event.isBackgroundChanged }" 
               >
-                {{ assistText }}
+                {{ event.assistText }}
               </div>
             </p>
 
-            <p class="info description" @click="showModal = true">
+            <p class="info description" @click="showEventDetails(event)">
               <i class="fas fa-info-circle"></i>
               <span>Description</span>
             </p>
           </div>
         </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
+        <button class="action" @click="toggleBackgroundColorAndText(event)">Book it</button>
       </div>
     </div>
 
@@ -84,237 +99,12 @@ onMounted(fetchEvents);
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="showModal = false">&times;</span>
-        <p>Descripción detallada del evento...</p>
+        <p>{{ selectedEvent?.description || 'No description available' }}</p>
       </div>
     </div>
   </div>
 </template>
 
-
-
-
-<!-- <script setup>
-import { ref } from "vue";
-
-const showModal = ref(false);
-
-const isBackgroundChanged = ref(false);
-
-const assistText = ref("Reserve a Place");
-
-const toggleBackgroundColorAndText = () => {
-  isBackgroundChanged.value = !isBackgroundChanged.value;
-  assistText.value = isBackgroundChanged.value ? "Confirmed Attendance" : "Reserve a Place";
-  
-};
-</script>
-
-<template>
-  <div class="container">
-    <div class="item-container">
-      <div class="img-container">
-        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
-      </div>
-
-      <div class="body-container">
-        <div class="overlay"></div>
-
-        <div class="event-info">
-          <p class="title">Guns n' Roses</p>
-          <div class="separator"></div>
-          <p class="info">
-            <i class="far fa-calendar-alt"></i>
-            Sat, Sep 19, 10:00 AM EDT
-          </p>
-          <p class="price">
-            <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>120</span>
-            <span>/</span>
-            <span>500</span>
-          </p>
-
-          <div class="additional-info">
-            <p class="info">
-              <i class="fas fa-map-marker-alt"></i>
-              Madrid
-            </p>
-
-            <p class="info">
-              <div 
-                id="checked" 
-                :class="{ 'background-changed': isBackgroundChanged }" 
-               
-              >
-                {{ assistText }}
-              </div>
-            </p>
-
-            <p class="info description" @click="showModal = true">
-              <i class="fas fa-info-circle"></i>
-              <span>Description</span>
-            </p>
-          </div>
-        </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
-      </div>
-    </div>
-
-
-    <div class="item-container">
-      <div class="img-container">
-        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
-      </div>
-
-      <div class="body-container">
-        <div class="overlay"></div>
-
-        <div class="event-info">
-          <p class="title">Guns n' Roses</p>
-          <div class="separator"></div>
-          <p class="info">
-            <i class="far fa-calendar-alt"></i>
-            Sat, Sep 19, 10:00 AM EDT
-          </p>
-          <p class="price">
-            <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>120</span>
-            <span>/</span>
-            <span>500</span>
-          </p>
-
-          <div class="additional-info">
-            <p class="info">
-              <i class="fas fa-map-marker-alt"></i>
-              Madrid
-            </p>
-
-            <p class="info">
-              <div 
-                id="checked" 
-                :class="{ 'background-changed': isBackgroundChanged }" 
-               
-              >
-                {{ assistText }}
-              </div>
-            </p>
-
-            <p class="info description" @click="showModal = true">
-              <i class="fas fa-info-circle"></i>
-              <span>Description</span>
-            </p>
-          </div>
-        </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
-      </div>
-    </div>
-
-    <div class="item-container">
-      <div class="img-container">
-        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
-      </div>
-
-      <div class="body-container">
-        <div class="overlay"></div>
-
-        <div class="event-info">
-          <p class="title">Guns n' Roses</p>
-          <div class="separator"></div>
-          <p class="info">
-            <i class="far fa-calendar-alt"></i>
-            Sat, Sep 19, 10:00 AM EDT
-          </p>
-          <p class="price">
-            <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>120</span>
-            <span>/</span>
-            <span>500</span>
-          </p>
-
-          <div class="additional-info">
-            <p class="info">
-              <i class="fas fa-map-marker-alt"></i>
-              Madrid
-            </p>
-
-            <p class="info">
-              <div 
-                id="checked" 
-                :class="{ 'background-changed': isBackgroundChanged }" 
-               
-              >
-                {{ assistText }}
-              </div>
-            </p>
-
-            <p class="info description" @click="showModal = true">
-              <i class="fas fa-info-circle"></i>
-              <span>Description</span>
-            </p>
-          </div>
-        </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
-      </div>
-    </div>
-
-    <div class="item-container">
-      <div class="img-container">
-        <img id="img" src="../assets/img/gunsroses.jpg" alt="Event image" />
-      </div>
-
-      <div class="body-container">
-        <div class="overlay"></div>
-
-        <div class="event-info">
-          <p class="title">Guns n' Roses</p>
-          <div class="separator"></div>
-          <p class="info">
-            <i class="far fa-calendar-alt"></i>
-            Sat, Sep 19, 10:00 AM EDT
-          </p>
-          <p class="price">
-            <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>120</span>
-            <span>/</span>
-            <span>500</span>
-          </p>
-
-          <div class="additional-info">
-            <p class="info">
-              <i class="fas fa-map-marker-alt"></i>
-              Madrid
-            </p>
-
-            <p class="info">
-              <div 
-                id="checked" 
-                :class="{ 'background-changed': isBackgroundChanged }" 
-               
-              >
-                {{ assistText }}
-              </div>
-            </p>
-
-            <p class="info description" @click="showModal = true">
-              <i class="fas fa-info-circle"></i>
-              <span>Description</span>
-            </p>
-          </div>
-        </div>
-        <button class="action" @click="toggleBackgroundColorAndText">Book it</button>
-      </div>
-    </div>
-    -->
- 
-
-    <!-- Modal -->
-    <!-- <div v-if="showModal" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="showModal = false">&times;</span>
-        <p>Descripción detallada del evento...</p>
-      </div>
-    </div>
-  </div>
-</template> --> 
 <style scoped>
 .container {
   width: 100%;
@@ -331,12 +121,13 @@ const toggleBackgroundColorAndText = () => {
   height: 580px;
   overflow: hidden;
   background-color: #fff;
-  box-shadow: 0 0 15px 15px#301f35;
+  box-shadow: 0 0 15px 15px #301f35;
   cursor: pointer;
   border-radius: 8px;
 }
+
 .item-container:hover {
-  box-shadow: 0 0 20px 15px#d43089;
+  box-shadow: 0 0 20px 15px #d43089;
 }
 
 .img-container,
@@ -347,6 +138,7 @@ const toggleBackgroundColorAndText = () => {
   width: 100%;
   height: 400px;
 }
+
 #img {
   height: 400px;
   object-fit: cover;
@@ -427,9 +219,11 @@ const toggleBackgroundColorAndText = () => {
   color: #301f35;
   font-weight: bolder;
 }
+
 #iconUser {
   margin: 5px;
 }
+
 .action {
   color: #fff;
   border: 3px solid #fff;
@@ -456,10 +250,12 @@ const toggleBackgroundColorAndText = () => {
 .action:hover {
   background-color: #d43089;
 }
+
 #link {
   font-weight: bold;
 }
 
+/* Modal styles */
 .modal {
   display: flex;
   justify-content: center;
@@ -491,10 +287,10 @@ const toggleBackgroundColorAndText = () => {
   font-weight: bold;
   cursor: pointer;
 }
-#checked{
+
+#checked {
   width: 170px;
   height: 30px;
- 
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -509,5 +305,10 @@ const toggleBackgroundColorAndText = () => {
   transform-style: preserve-3d;
   transform: rotateX(360deg);
   
+}
+@media (max-width: 600px) {
+  .title {
+    font-size: 20px;
+  }
 }
 </style>

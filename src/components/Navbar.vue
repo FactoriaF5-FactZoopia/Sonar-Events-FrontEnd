@@ -156,4 +156,9 @@ const toggleMenu = () => {
 #idEventos:hover::after {
   transform: scaleX(1);
 }
+@media (max-width: 600px) {
+  #titulo {
+    font-size: 15px;
+  }
+}
 </style>

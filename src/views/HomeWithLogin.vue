@@ -129,4 +129,9 @@ span {
     transform: translateY(1px) scale(1);
   }
 }
+@media (max-width: 768px) {
+  #containerslider {
+    display: none;
+  }
+}
 </style>
