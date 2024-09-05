@@ -17,39 +17,9 @@ import NavbarSinLogin from "@/components/NavbarSinLogin.vue";
       </div>
     </div>
     <div id="containerToogle">
-      <div id="toggle">
-        <Toggle></Toggle>
-      </div>
+      <div id="toggle"></div>
     </div>
-    <div id="containerSpan">
-      <div id="span">
-        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Choose Past Events</span
-        >
-      </div>
-    </div>
-    <!--     <div class="bubbles">
-      <span style="--i: 11"></span>
-      <span style="--i: 12"></span>
-      <span style="--i: 24"></span>
-      <span style="--i: 10"></span>
-      <span style="--i: 14"></span>
-      <span style="--i: 23"></span>
-      <span style="--i: 18"></span>
-      <span style="--i: 16"></span>
-      <span style="--i: 19"></span>
-      <span style="--i: 20"></span>
-      <span style="--i: 22"></span>
-      <span style="--i: 25"></span>
-      <span style="--i: 18"></span>
-      <span style="--i: 21"></span>
-      <span style="--i: 15"></span>
-      <span style="--i: 13"></span>
-      <span style="--i: 26"></span>
-      <span style="--i: 17"></span>
-      <span style="--i: 13"></span>
-      <span style="--i: 28"></span>
-    </div> -->
+
     <CardSinLogin></CardSinLogin>
   </main>
   <div id="blankspace"></div>
