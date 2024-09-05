@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { usePopupStore } from '../stores/popup';
+import { usePopupStore } from "../stores/popup";
 
 const isMenuOpen = ref(false);
 const popupStore = usePopupStore();
@@ -44,9 +44,9 @@ const openLoginPopup = () => {
 
           <div class="hidden xl:flex items-center space-x-5 items-center">
             <div class="flex items-center hover:text-gray-200">
-              <a 
-                class="hover:text-gray-200 font-semibold" 
-                id="logout" 
+              <a
+                class="hover:text-gray-200 font-semibold"
+                id="logout"
                 href="#"
                 @click.prevent="openLoginPopup"
               >
@@ -62,7 +62,6 @@ const openLoginPopup = () => {
             </div>
           </div>
         </div>
-     
 
         <a
           class="navbar-burger self-center mr-12 xl:hidden"
@@ -162,5 +161,10 @@ const openLoginPopup = () => {
 #idHome:hover::after,
 #idEventos:hover::after {
   transform: scaleX(1);
+}
+@media (max-width: 600px) {
+  #titulo {
+    font-size: 15px;
+  }
 }
 </style>
