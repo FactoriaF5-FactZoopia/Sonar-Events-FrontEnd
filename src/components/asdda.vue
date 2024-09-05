@@ -1,73 +1,66 @@
-<script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+<script>
 import { usePopupStore } from "../stores/popup";
-import { useAuthStore } from "@/stores/auth";
 
-const popupStore = usePopupStore();
-const authStore = useAuthStore();
-const router = useRouter();
+export default {
+  name: "LoginComponent",
+  data() {
+    return {
+      isLoginActive: true,
+      loginEmail: "",
+      loginPassword: "",
+      signupEmail: "",
+      signupPassword: "",
+      confirmPassword: "",
+    };
+  },
+  methods: {
+    setLoginActive(value) {
+      this.isLoginActive = value;
+    },
+    handleLogin() {
+      console.log("Login attempt", this.loginEmail, this.loginPassword);
+    },
+    handleSignup() {
+      console.log("Signup attempt", this.signupEmail, this.signupPassword);
+    },
+    forgotPassword() {
+      console.log("Forgot password");
+    },
 
-const isLoginActive = ref(true);
-const username = ref("");
-const loginPassword = ref("");
-const signupEmail = ref("");
-const signupPassword = ref("");
-const confirmPassword = ref("");
-const errorMessage = ref("");
-
-const handleLogin = async () => {
-  try {
-    const response = await authStore.login(username.value, loginPassword.value);
-    console.log(response.message);
-    
-    if (response ) {
-      authStore.user.isAuthenticated = true;
-      authStore.user.username = response['username'];
-      // await router.push('/eventos');
-      closePopup();
-    } else {
-      errorMessage.value = "Login failed: Unexpected server response";
-    }
-  } catch (error) {
-    if (error.response) {
-      switch (error.response.status) {
-        case 404:
-          errorMessage.value = "Login endpoint not found. Please check the API configuration.";
-          break;
-        case 401:
-          errorMessage.value = "Invalid email or password";
-          break;
-        default:
-          errorMessage.value = `An error occurred during login: ${error.response.status} ${error.response.statusText}`;
+    toggleForm(form) {
+      if (form === "login") {
+        this.isLogin = true;
+        this.isSignup = false;
+      } else {
+        this.isLogin = false;
+        this.isSignup = true;
       }
-    } else if (error.request) {
-      errorMessage.value = "No response received from the server. Please try again later.";
-    } else {
-      errorMessage.value = `An unexpected error occurred: ${error.message}`;
-    }
-  }
-};
-
-const handleSignup = async () => {
-  if (signupPassword.value !== confirmPassword.value) {
-    errorMessage.value = 'Passwords do not match';
-    return;
-  }
-  
-  errorMessage.value = "Signup functionality not implemented yet";
-};
-
-const setLoginActive = (value) => {
-  isLoginActive.value = value;
-  errorMessage.value = "";
-};
-
-const closePopup = () => {
-  popupStore.closePopups();
+    },
+    submitForm(form) {
+      if (form === "login") {
+        console.log("Login:", this.loginEmail, this.loginPassword);
+        this.closePopup();
+      } else {
+        console.log(
+          "Signup:",
+          this.signupEmail,
+          this.signupPassword,
+          this.confirmPassword
+        );
+        this.closePopup();
+      }
+    },
+    closePopup() {
+      const popupStore = usePopupStore();
+      popupStore.closePopups();
+    },
+  },
+  setup() {
+    const popupStore = usePopupStore();
+    return { popupStore };
+  },
 };
 </script>
-
 <template>
   <div
     v-if="popupStore.isLoginOpen"
@@ -118,8 +111,8 @@ const closePopup = () => {
             <div class="field">
               <input
                 type="text"
-                v-model="username"
-                placeholder="username"
+                v-model="loginEmail"
+                placeholder="Email Address"
                 required
               />
             </div>
@@ -131,10 +124,11 @@ const closePopup = () => {
                 required
               />
             </div>
-            <div class="field btn">
-              <div class="btn-layer"></div>
-              <input type="submit" value="Login" />
-            </div>
+            <RouterLink to="/homewithlogin"
+              ><div class="field btn">
+                <div class="btn-layer"></div>
+                <input type="submit" value="Login" /></div
+            ></RouterLink>
           </form>
           <form @submit.prevent="handleSignup" v-else>
             <div class="field">
@@ -168,7 +162,6 @@ const closePopup = () => {
           </form>
         </div>
       </div>
-      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
   </div>
 </template>
