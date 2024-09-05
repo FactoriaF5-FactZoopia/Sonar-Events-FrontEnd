@@ -1,22 +1,21 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 
 const events = ref([]);
+const pastEvents = ref([]);
+const showPastEvents = ref(false);
 const showModal = ref(false);
 const selectedEvent = ref(null);
 
 const fetchEvents = async () => {
   try {
     const response = await fetch('http://localhost:8080/api/v1/events/allevents');
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
+    if (!response.ok) throw new Error('Network response was not ok');
     const data = await response.json();
-    console.log('Fetched events:', data);
     events.value = data.map(event => ({
       id: event.id,
       title: event.title,
-      date: new Date(event.date).toLocaleString(), 
+      date: new Date(event.date).toLocaleString(),
       location: event.place,
       currentAttendees: event.registeredParticipants,
       totalAttendees: event.maxParticipants,
@@ -24,11 +23,37 @@ const fetchEvents = async () => {
       imageUrl: event.image,
       isAvailable: event.available,
       isPast: event.past,
-      isBackgroundChanged: false, // Estado para cada evento
-      assistText: "Reserve a Place" // Texto inicial para cada evento
+      isBackgroundChanged: false, // Inicialmente en false
+      assistText: "Reserve a Place" // Texto inicial
     }));
+    console.log('Fetched current events:', events.value);
   } catch (error) {
     console.error('Error fetching events:', error);
+  }
+};
+
+const fetchPastEvents = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/v1/events/past');
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    pastEvents.value = data.map(event => ({
+      id: event.id,
+      title: event.title,
+      date: new Date(event.date).toLocaleString(),
+      location: event.place,
+      currentAttendees: event.registeredParticipants,
+      totalAttendees: event.maxParticipants,
+      description: event.description,
+      imageUrl: event.image,
+      isAvailable: event.available,
+      isPast: event.past,
+      isBackgroundChanged: false, // Inicialmente en false
+      assistText: "Reserve a Place" // Texto inicial
+    }));
+    console.log('Fetched past events:', pastEvents.value);
+  } catch (error) {
+    console.error('Error fetching past events:', error);
   }
 };
 
@@ -39,71 +64,100 @@ const toggleBackgroundColorAndText = (event) => {
 
 const showEventDetails = (event) => {
   selectedEvent.value = event;
-  console.log('Selected event:', event); // Depuración: Verifica el evento seleccionado
   showModal.value = true;
 };
 
-onMounted(fetchEvents);
+onMounted(() => {
+  fetchEvents();
+  fetchPastEvents();
+});
+
+const toggleEvents = () => {
+  showPastEvents.value = !showPastEvents.value;
+  console.log('Toggle now is:', showPastEvents.value);
+};
+
+watch(showPastEvents, (newVal) => {
+  console.log('showPastEvents changed:', newVal);
+});
 </script>
 
 <template>
-  <div class="container">
-    <div v-for="event in events" :key="event.id" class="item-container">
-      <div class="img-container">
-        <img id="img" src="../assets/img/aerosmith.jpg" alt="Event image" />
-      </div>
-
-      <div class="body-container">
-        <div class="overlay"></div>
-
-        <div class="event-info">
-          <p class="title">{{ event.title }}</p>
-          <div class="separator"></div>
-          <p class="info">
-            <i class="far fa-calendar-alt"></i>
-            {{ event.date }}
-          </p>
-          <p class="price">
-            <i id="iconUser" class="fa fa-user-circle"></i>
-            <span>{{ event.currentAttendees }}</span>
-            <span>/</span>
-            <span>{{ event.totalAttendees }}</span>
-          </p>
-
-          <div class="additional-info">
-            <p class="info">
-              <i class="fas fa-map-marker-alt"></i>
-              {{ event.location }}
-            </p>
-
-            <p class="info">
-              <div 
-                id="checked" 
-                :class="{ 'background-changed': event.isBackgroundChanged }" 
-              >
-                {{ event.assistText }}
-              </div>
-            </p>
-
-            <p class="info description" @click="showEventDetails(event)">
-              <i class="fas fa-info-circle"></i>
-              <span>Description</span>
-            </p>
-          </div>
-        </div>
-        <button class="action" @click="toggleBackgroundColorAndText(event)">Book it</button>
-      </div>
+  <div>
+    <div id="containerCheckbox">
+      <label class="inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          class="sr-only peer"
+          @change="toggleEvents"
+        />
+        <div
+          class="relative w-14 h-7 bg-[#301f35] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[white] dark:peer-focus:ring-[white] rounded-full peer dark:bg-[#301f35] border border-[white] peer-checked:bg-[#d43089] peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-[white] after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-[white] after:border-[white] after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-[white]"
+        ></div>
+      </label>
     </div>
+    <div id="containerTextCheckbox">
+      <p>All events / Past Events</p>
+    </div>
+    <div class="container">
+      <div v-for="event in (showPastEvents ? pastEvents : events)" :key="event.id" class="item-container">
+        <div class="img-container">
+          <img id="img" src="../assets/img/music5.jpg" alt="Event image" />
+        </div>
 
-    <!-- Modal -->
-    <div v-if="showModal" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="showModal = false">&times;</span>
-        <p>{{ selectedEvent?.description || 'No description available' }}</p>
+        <div class="body-container">
+          <div class="overlay"></div>
+
+          <div class="event-info">
+            <p class="title">{{ event.title }}</p>
+            <div class="separator"></div>
+            <p class="info">
+              <i class="far fa-calendar-alt"></i>
+              {{ event.date }}
+            </p>
+            <p class="price">
+              <i id="iconUser" class="fa fa-user-circle"></i>
+              <span>{{ event.currentAttendees }}</span>
+              <span>/</span>
+              <span>{{ event.totalAttendees }}</span>
+            </p>
+
+            <div class="additional-info">
+              <p class="info">
+                <i class="fas fa-map-marker-alt"></i>
+                {{ event.location }}
+              </p>
+
+              <p class="info">
+                <div 
+                  id="checked" 
+                  :class="{ 'background-changed': event.isBackgroundChanged }" 
+                >
+                  {{ event.assistText }}
+                </div>
+              </p>
+
+              <p class="info description" @click="showEventDetails(event)">
+                <i class="fas fa-info-circle"></i>
+                <span>Description</span>
+              </p>
+            </div>
+          </div>
+          <button class="action" @click="toggleBackgroundColorAndText(event)">Book it</button>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div v-if="showModal" class="modal">
+        <div class="modal-content">
+          <span class="close" @click="showModal = false">&times;</span>
+          <p>{{ selectedEvent?.description || 'No description available' }}</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .container {
@@ -121,13 +175,12 @@ onMounted(fetchEvents);
   height: 580px;
   overflow: hidden;
   background-color: #fff;
-  box-shadow: 0 0 15px 15px #301f35;
+  box-shadow: 0 0 15px 15px#301f35;
   cursor: pointer;
   border-radius: 8px;
 }
-
 .item-container:hover {
-  box-shadow: 0 0 20px 15px #d43089;
+  box-shadow: 0 0 20px 15px#d43089;
 }
 
 .img-container,
@@ -138,7 +191,6 @@ onMounted(fetchEvents);
   width: 100%;
   height: 400px;
 }
-
 #img {
   height: 400px;
   object-fit: cover;
@@ -219,11 +271,9 @@ onMounted(fetchEvents);
   color: #301f35;
   font-weight: bolder;
 }
-
 #iconUser {
   margin: 5px;
 }
-
 .action {
   color: #fff;
   border: 3px solid #fff;
@@ -250,11 +300,9 @@ onMounted(fetchEvents);
 .action:hover {
   background-color: #d43089;
 }
-
 #link {
   font-weight: bold;
 }
-
 /* Modal styles */
 .modal {
   display: flex;
@@ -278,6 +326,12 @@ onMounted(fetchEvents);
   text-align: center;
   position: relative;
 }
+#containerCheckbox{
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .close {
   position: absolute;
@@ -287,10 +341,10 @@ onMounted(fetchEvents);
   font-weight: bold;
   cursor: pointer;
 }
-
-#checked {
+#checked{
   width: 170px;
   height: 30px;
+ 
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -301,14 +355,19 @@ onMounted(fetchEvents);
 .background-changed {
   background-color: #301f35; 
   color: white;
-  transition: transform 1.5s;
-  transform-style: preserve-3d;
-  transform: rotateX(360deg);
-  
+}
+#containerTextCheckbox{
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #301f35;
+  font-weight: bold;
 }
 @media (max-width: 600px) {
-  .title {
+   .title{
     font-size: 20px;
+   }
+  
   }
-}
 </style>
