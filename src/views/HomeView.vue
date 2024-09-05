@@ -1,4 +1,5 @@
 <script setup>
+import Slider from "@/components/Slider.vue";
 import Toggle from "@/components/Toggle.vue";
 import CardSinLogin from "@/components/CardSinLogin.vue";
 import Login from "@/components/Login.vue";
@@ -11,7 +12,9 @@ import NavbarSinLogin from "@/components/NavbarSinLogin.vue";
   <div id="blankspace"></div>
   <main>
     <div id="containerslider">
-      <div id="slider"></div>
+      <div id="slider">
+        <Slider></Slider>
+      </div>
     </div>
     <div id="containerToogle">
       <div id="toggle">
@@ -97,6 +100,8 @@ main {
   width: 60%;
   height: 300px;
   background-color: white;
+
+  box-shadow: 0 0 15px 15px #301f35;
 }
 #containerToogle {
   width: 100%;
