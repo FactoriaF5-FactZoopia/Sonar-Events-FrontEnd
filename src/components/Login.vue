@@ -1,12 +1,14 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { usePopupStore } from "../stores/popup";
 import { useAuthStore } from "@/stores/auth";
+import { loginChange } from "@/stores/loginChange";
 
 const popupStore = usePopupStore();
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const isLoginActive = ref(true);
 const username = ref("");
@@ -15,46 +17,61 @@ const signupEmail = ref("");
 const signupPassword = ref("");
 const confirmPassword = ref("");
 const errorMessage = ref("");
+const textAlert = ref("");
+
+const Register = () => {
+  if (!loginChange.register) {
+    loginChange.setRegister(true);
+  } else {
+    loginChange.setRegister(false);
+  }
+};
 
 const handleLogin = async () => {
-  try {
-    const response = await authStore.login(username.value, loginPassword.value);
-    console.log(response.message);
-    
-    if (response ) {
-      authStore.user.isAuthenticated = true;
-      authStore.user.username = response['username'];
-      // await router.push('/eventos');
-      closePopup();
-    } else {
-      errorMessage.value = "Login failed: Unexpected server response";
-    }
-  } catch (error) {
-    if (error.response) {
-      switch (error.response.status) {
-        case 404:
-          errorMessage.value = "Login endpoint not found. Please check the API configuration.";
-          break;
-        case 401:
-          errorMessage.value = "Invalid email or password";
-          break;
-        default:
-          errorMessage.value = `An error occurred during login: ${error.response.status} ${error.response.statusText}`;
+  if (username.value !== "" && loginPassword.value !== "") {
+    try {
+      const response = await authStore.login(
+        username.value,
+        loginPassword.value
+      );
+
+      if (response.message === "Logged") {
+        authStore.user.isAuthenticated = true;
+        authStore.user.id = response.id;
+        authStore.user.username = response.username;
+        authStore.user.role = response.roles;
+
+        // Guardar datos en localStorage
+        localStorage.setItem("id", response.id);
+        localStorage.setItem("username", response.username);
+        localStorage.setItem("role", response.roles);
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem(
+          "token",
+          btoa(`${username.value}:${loginPassword.value}`)
+        );
+
+        const redirectPath = route.query.redirect || "/homewithlogin";
+        await router.push(redirectPath);
+
+        closePopup();
+      } else {
+        textAlert.value = "Incorrect username or password!";
       }
-    } else if (error.request) {
-      errorMessage.value = "No response received from the server. Please try again later.";
-    } else {
-      errorMessage.value = `An unexpected error occurred: ${error.message}`;
+    } catch (error) {
+      textAlert.value = "Error trying to login, please try again.";
     }
+  } else {
+    textAlert.value = "Username or password cannot be empty!";
   }
 };
 
 const handleSignup = async () => {
   if (signupPassword.value !== confirmPassword.value) {
-    errorMessage.value = 'Passwords do not match';
+    errorMessage.value = "Passwords do not match";
     return;
   }
-  
+
   errorMessage.value = "Signup functionality not implemented yet";
 };
 
